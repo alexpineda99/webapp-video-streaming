@@ -12,6 +12,10 @@ import InputAdornment from "@mui/material/InputAdornment";
 import FormHelperText from "@mui/material/FormHelperText";
 import Button from "@mui/material/Button";
 import FormControl from "@mui/material/FormControl";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
 import Footer from "./Footer";
 
 function Signup() {
@@ -38,8 +42,113 @@ function Signup() {
         flexDirection: "column",
       }}
     >
-      <Box sx={{width: "100%", display: "flex", flexDirection: "column", alignItems: "center", height: "100%", marginTop: "10%"}}>
-        <h1>Sign Up</h1>
+      <Box>
+        <Card sx={{boxShadow: "#000 1px 1px 10px"}}>
+          <CardContent
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <h1>Sign Up</h1>
+            <Grid2 lg={12}>
+              <FormControl sx={{ mt: 2, width: "17rem" }} variant="outlined">
+                <TextField
+                  id="outlined-basic"
+                  label="Username"
+                  variant="outlined"
+                />
+              </FormControl>
+            </Grid2>
+            <Grid2 lg={12}>
+              <FormControl sx={{ mt: 2, width: "17rem" }} variant="outlined">
+                <TextField
+                  id="outlined-basic"
+                  label="Email"
+                  variant="outlined"
+                />
+              </FormControl>
+            </Grid2>
+            {/* <Grid2 lg={12}>
+              <FormControl sx={{ mt: 2}} variant="outlined">
+                <TextField
+                  error
+                  id="outlined-error-helper-text"
+                  label="Error"
+                  defaultValue="Hello World"
+                  helperText="Incorrect entry."
+                />
+              </FormControl>
+            </Grid2> */}
+            <Grid2 lg={12}>
+              <FormControl sx={{ mt: 2, width: "17rem" }} variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-password">
+                  Password
+                </InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={showPassword ? "text" : "password"}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label="Password"
+                />
+              </FormControl>
+            </Grid2>
+            <Grid2 lg={12}>
+              <FormControl sx={{ mt: 2, width: "17rem" }} variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-password">
+                  Confirm Password
+                </InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={showConfirmPassword ? "text" : "password"}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowConfirmPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showConfirmPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label="Confirm Password"
+                />
+              </FormControl>
+              <Grid2 sx={{ display: "flex", justifyContent: "center" }}>
+                <Button variant="contained" sx={{ marginTop: "10%" }}>
+                  Create an account
+                </Button>
+              </Grid2>
+              {/* <Grid2 sx={{ mt: 2, display: "flex", justifyContent: "center" }}>
+                <span> Forgot password?</span>
+              </Grid2> */}
+            </Grid2>
+          </CardContent>
+          <CardActions>
+            <Button size="small">Forgot password?</Button>
+          </CardActions>
+        </Card>
+
+        {/* <h1>Sign Up</h1>
         <Grid2 lg={2}>
           <FormControl sx={{mt:2, width: "50ch" }} variant="outlined">
             <TextField
@@ -56,7 +165,7 @@ function Signup() {
           </FormControl>
         </Grid2>
 
-        {/* <Grid2 lg={2}>
+        <Grid2 lg={2}>
         <FormControl sx={{mt:2, width: "50ch" }} variant="outlined">
           <TextField
             error
@@ -66,7 +175,7 @@ function Signup() {
             helperText="Incorrect entry."
           />
         </FormControl>
-      </Grid2> */}
+      </Grid2>
 
         <Grid2 lg={2}>
           <FormControl sx={{mt:2, width: "50ch" }} variant="outlined">
@@ -122,7 +231,7 @@ function Signup() {
           <Grid2 sx={{mt:2, display: "flex", justifyContent: "center"}}>
             <span> Forgot password?</span>
           </Grid2>
-        </Grid2>
+        </Grid2> */}
       </Box>
       {/* <Footer/> */}
     </Grid2>
