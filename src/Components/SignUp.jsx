@@ -15,13 +15,15 @@ import FormControl from "@mui/material/FormControl";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
+import { useForm } from "react-hook-form";
 import Footer from "./Footer";
 
 function Signup() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+  const { register, handleSubmit } = useForm();
 
+  const onSubmit = (data) => console.log(data);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleClickShowConfirmPassword = () =>
     setShowConfirmPassword((show) => !show);
@@ -53,12 +55,14 @@ function Signup() {
             }}
           >
             <h1>Sign Up</h1>
+            <form onSubmit={handleSubmit(onSubmit)}>
             <Grid2 lg={12}>
               <FormControl sx={{ mt: 2, width: "17rem" }} variant="outlined">
                 <TextField
                   id="outlined-basic"
                   label="Username"
                   variant="outlined"
+                  {...register("firsname")}
                 />
               </FormControl>
             </Grid2>
@@ -134,7 +138,7 @@ function Signup() {
                 />
               </FormControl>
               <Grid2 sx={{ display: "flex", justifyContent: "center" }}>
-                <Button variant="contained" sx={{ marginTop: "10%" }}>
+                <Button type="submit" variant="contained" sx={{ marginTop: "10%" }}>
                   Create an account
                 </Button>
               </Grid2>
@@ -142,96 +146,13 @@ function Signup() {
                 <span> Forgot password?</span>
               </Grid2> */}
             </Grid2>
+            </form>
           </CardContent>
           <CardActions>
             <Button size="small">Forgot password?</Button>
           </CardActions>
         </Card>
 
-        {/* <h1>Sign Up</h1>
-        <Grid2 lg={2}>
-          <FormControl sx={{mt:2, width: "50ch" }} variant="outlined">
-            <TextField
-              id="outlined-basic"
-              label="Username"
-              variant="outlined"
-            />
-          </FormControl>
-        </Grid2>
-
-        <Grid2 lg={2}>
-          <FormControl sx={{mt:2, width: "50ch" }} variant="outlined">
-            <TextField id="outlined-basic" label="Email" variant="outlined" />
-          </FormControl>
-        </Grid2>
-
-        <Grid2 lg={2}>
-        <FormControl sx={{mt:2, width: "50ch" }} variant="outlined">
-          <TextField
-            error
-            id="outlined-error-helper-text"
-            label="Error"
-            defaultValue="Hello World"
-            helperText="Incorrect entry."
-          />
-        </FormControl>
-      </Grid2>
-
-        <Grid2 lg={2}>
-          <FormControl sx={{mt:2, width: "50ch" }} variant="outlined">
-            <InputLabel htmlFor="outlined-adornment-password">
-              Password
-            </InputLabel>
-            <OutlinedInput
-              id="outlined-adornment-password"
-              type={showPassword ? "text" : "password"}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="Password"
-            />
-          </FormControl>
-        </Grid2>
-
-        <Grid2 lg={2}>
-          <FormControl sx={{mt:2, width: "50ch" }} variant="outlined">
-            <InputLabel htmlFor="outlined-adornment-password">
-              Confirm Password
-            </InputLabel>
-            <OutlinedInput
-              id="outlined-adornment-password"
-              type={showConfirmPassword ? "text" : "password"}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowConfirmPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="Confirm Password"
-            />
-          </FormControl>
-          <Grid2 sx={{ display: "flex", justifyContent: "center" }}>
-            <Button variant="contained" sx={{marginTop: "5%"}}>Create an account</Button>
-          </Grid2>
-          <Grid2 sx={{mt:2, display: "flex", justifyContent: "center"}}>
-            <span> Forgot password?</span>
-          </Grid2>
-        </Grid2> */}
       </Box>
       {/* <Footer/> */}
     </Grid2>
