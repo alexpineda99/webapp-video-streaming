@@ -1,6 +1,7 @@
 import React from "react";
 import { pushRotate as Menu } from "react-burger-menu";
 import Box from "@mui/material/Box";
+import { Link } from "react-router-dom";
 
 export default (props) => {
 
@@ -13,11 +14,11 @@ export default (props) => {
     // Pass on our props
     <Menu {...props} onStateChange={isMenuOpen}>
       <Box sx={{marginTop: "10%", color: "#fff"}}>
-        <span className="text-nav">Home</span>
+        <span className="text-nav"><Link> Home </Link></span>
       </Box>
 
       <Box sx={{marginTop: "10%", color: "#fff"}}>
-        <span className="text-nav"> Boxbout </span>
+        <span className="text-nav"> <Link to={"/signup"}> Sign Up </Link> </span>
       </Box>
 
       <Box sx={{marginTop: "10%", color: "#fff"}}>
