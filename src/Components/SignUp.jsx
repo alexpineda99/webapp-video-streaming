@@ -9,7 +9,6 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
-import FormHelperText from "@mui/material/FormHelperText";
 import Button from "@mui/material/Button";
 import FormControl from "@mui/material/FormControl";
 import Card from "@mui/material/Card";
@@ -21,7 +20,16 @@ import Footer from "./Footer";
 function Signup() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, formState: {errors}, watch } = useForm();
+
+  const passwordMessage =
+  <div>
+    <p className="reset-p"> Password must have: </p>
+    <p className="reset-p">* Minimun 8 characters</p>
+    <p className="reset-p">* Maximun 16 characters</p>
+    <p className="reset-p">* At least one uppercase</p>
+    <p className="reset-p">* At least one lowercase</p>
+    <p className="reset-p">* At least one special character</p> </div>;
 
   const onSubmit = (data) => console.log(data);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -44,7 +52,7 @@ function Signup() {
         flexDirection: "column",
       }}
     >
-      <Box>
+      <Box sx={{marginTop: "8rem"}}>
         <Card sx={{boxShadow: "#000 1px 1px 10px"}}>
           <CardContent
             sx={{
@@ -62,7 +70,13 @@ function Signup() {
                   id="outlined-basic"
                   label="Username"
                   variant="outlined"
-                  {...register("firsname")}
+                  {...register("username", {required: "This field is required",
+                  minLength: {value: 3, message: "Username field must be at least 3 characters and no more than 20 characters"},
+                  maxLength: {value:20, message: "Username field must be at least 3 characters and no more than 20 characters"},
+                  pattern: {value: /^[A-Za-z0-9._-]+$/i, message: "Username can only contain letters, numbers, underscores, dashes and periods"}
+                })}
+                  helperText={errors.username && errors.username.message}
+                  error={errors.username && true}
                 />
               </FormControl>
             </Grid2>
@@ -72,28 +86,25 @@ function Signup() {
                   id="outlined-basic"
                   label="Email"
                   variant="outlined"
+                  {...register("email", {
+                    required: "This field is required",
+                    pattern: { value: /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i, message: "Invalid email address" }
+                  })}
+                  helperText={errors.email && errors.email.message}
+                  error={errors.email && true}
                 />
               </FormControl>
             </Grid2>
-            {/* <Grid2 lg={12}>
-              <FormControl sx={{ mt: 2}} variant="outlined">
-                <TextField
-                  error
-                  id="outlined-error-helper-text"
-                  label="Error"
-                  defaultValue="Hello World"
-                  helperText="Incorrect entry."
-                />
-              </FormControl>
-            </Grid2> */}
             <Grid2 lg={12}>
               <FormControl sx={{ mt: 2, width: "17rem" }} variant="outlined">
-                <InputLabel htmlFor="outlined-adornment-password">
+                <InputLabel color={errors.password && "error"} htmlFor="outlined-adornment-password" sx={{color: errors.password && "#D32F2F"}}>
                   Password
                 </InputLabel>
                 <OutlinedInput
                   id="outlined-adornment-password"
+                  label="Password"
                   type={showPassword ? "text" : "password"}
+                  
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
@@ -106,13 +117,21 @@ function Signup() {
                       </IconButton>
                     </InputAdornment>
                   }
-                  label="Password"
+                  // label="Password"
+                  {...register("password", {
+                    required: "This field is required", minLength: { value: 8, message: passwordMessage }, maxLength: { value: 16, message: passwordMessage },
+                    pattern: { value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,16})/gm, message: passwordMessage }
+                  })}
+                  // helperText={errors.password && errors.password.message}
+                  
+                  error={errors.password && true}
                 />
+                {<p className="error-text-signup"> {errors.password && errors.password.message} </p>}
               </FormControl>
             </Grid2>
             <Grid2 lg={12}>
               <FormControl sx={{ mt: 2, width: "17rem" }} variant="outlined">
-                <InputLabel htmlFor="outlined-adornment-password">
+                <InputLabel color={errors.confirmPassword && "error"} htmlFor="outlined-adornment-password" sx={{color: errors.confirmPassword && "#D32F2F"}}>
                   Confirm Password
                 </InputLabel>
                 <OutlinedInput
@@ -135,7 +154,10 @@ function Signup() {
                     </InputAdornment>
                   }
                   label="Confirm Password"
+                  error={errors.confirmPassword && true}
+                  {...register("confirmPassword", { required: "This field is required", validate: (value) => {if(watch("password") != value){return "Passwords do not match"}}  })}
                 />
+                {<p className="error-text-signup"> {errors.confirmPassword && errors.confirmPassword.message} </p>}
               </FormControl>
               <Grid2 sx={{ display: "flex", justifyContent: "center" }}>
                 <Button type="submit" variant="contained" sx={{ marginTop: "10%" }}>
@@ -154,7 +176,7 @@ function Signup() {
         </Card>
 
       </Box>
-      {/* <Footer/> */}
+      <Footer/>
     </Grid2>
   );
 }
