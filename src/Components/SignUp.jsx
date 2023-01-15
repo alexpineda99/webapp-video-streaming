@@ -52,7 +52,7 @@ function Signup() {
         flexDirection: "column",
       }}
     >
-      <Box sx={{flex: "1 1 100%", display: "flex", alignItems: "center"}}>
+      <Box sx={{flex: "1 1 100%", display: "flex", alignItems: "center" }}>
         <Box sx={{boxShadow: "#000 1px 1px 10px", background: "#fff", padding: "10px"}}>
           <Box
             sx={{
