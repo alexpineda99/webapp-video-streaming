@@ -41,7 +41,7 @@ function Signup() {
   };
 
   return (
-    <Grid2
+    <Box
       container
       sx={{
         background: "#50469E",
@@ -52,9 +52,9 @@ function Signup() {
         flexDirection: "column",
       }}
     >
-      <Box sx={{marginTop: "8rem"}}>
-        <Card sx={{boxShadow: "#000 1px 1px 10px"}}>
-          <CardContent
+      <Box sx={{flex: "1 1 100%", display: "flex", alignItems: "center"}}>
+        <Box sx={{boxShadow: "#000 1px 1px 10px", background: "#fff", padding: "10px"}}>
+          <Box
             sx={{
               display: "flex",
               justifyContent: "center",
@@ -169,15 +169,14 @@ function Signup() {
               </Grid2> */}
             </Grid2>
             </form>
-          </CardContent>
-          <CardActions>
+          </Box>
+          <Box>
             <Button size="small">Forgot password?</Button>
-          </CardActions>
-        </Card>
-
+          </Box>
+        </Box>
       </Box>
       <Footer/>
-    </Grid2>
+    </Box>
   );
 }
 
