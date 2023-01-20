@@ -22,7 +22,7 @@ export default (props) => {
       </Box>
 
       <Box sx={{marginTop: "10%", color: "#fff"}}>
-        <span className="text-nav"> Services </span>
+        <span className="text-nav"> <Link to={"/signin"}> Sign In </Link> </span>
       </Box>
 
       <Box sx={{marginTop: "10%", color: "#fff"}}>

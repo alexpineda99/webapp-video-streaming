@@ -5,9 +5,14 @@ import { red } from "@mui/material/colors";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
+import {useSelector, useDispatch} from "react-redux";
+import {sumar} from "../State/reducers/actions-creators";
 
 function Home() {
   const [count, setCount] = useState(0);
+
+  const state = useSelector((state)=> console.log(state));
+  const dispatch = useDispatch();
 
   return (
     <div id="outer-container">
@@ -47,6 +52,7 @@ function Home() {
                 justifyContent: "center",
               }}
             >
+              {/* <button onClick={()=> dispatch(sumar())}> incrementa redux</button> */}
               {" "}
               Show up and share your skils
             </Box>

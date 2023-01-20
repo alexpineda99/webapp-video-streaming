@@ -1,0 +1,3 @@
+//USER LOGIN, LOGOUT, ETC
+
+export const INCREMENT = "INCREMENT";
