@@ -12,11 +12,17 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Button from "@mui/material/Button";
 import FormControl from "@mui/material/FormControl";
 import { useForm } from "react-hook-form";
+import Axios from "axios";
+import CircularProgress from '@mui/material/CircularProgress';
 import Footer from "./Footer";
 
 function Signup() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+  let [usernameAvailable, setUsernameavailable] = React.useState(true);
+  let [emailAvailable, setemailavailable] = React.useState(true);
+  let [loading, setLoading] = React.useState(false);
+
   const { register, handleSubmit, formState: {errors}, watch } = useForm();
 
   const passwordMessage =
@@ -36,6 +42,41 @@ function Signup() {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
+
+  const checkUsernameAvailability = (e) => {
+
+    setLoading(true);
+    Axios.post("http://localhost:3001/checkavailability", e)
+    .then(res => {
+      // console.log(res.data);
+      setUsernameavailable(true);
+      setLoading(false);
+    })
+    .catch(err=> {
+      console.log(err.response.data.errors.username);
+      setUsernameavailable(false);
+      setLoading(false);
+    })
+
+  }
+
+  const checkEmailAvailability = (e) => {
+    setLoading(true);
+    Axios.post("http://localhost:3001/checkavailability", e)
+    .then(res => {
+      // console.log(res.data);
+      setemailavailable(true);
+      setLoading(false);
+    })
+    .catch(err=> {
+      console.log(err.response.data.errors.email);
+      setemailavailable(false);
+      setLoading(false);
+    })
+
+  }
+
 
   return (
     <Box
@@ -70,11 +111,14 @@ function Signup() {
                   {...register("username", {required: "This field is required",
                   minLength: {value: 3, message: "Username field must be at least 3 characters and no more than 20 characters"},
                   maxLength: {value:20, message: "Username field must be at least 3 characters and no more than 20 characters"},
-                  pattern: {value: /^[A-Za-z0-9._-]+$/i, message: "Username can only contain letters, numbers, underscores, dashes and periods"}
+                  pattern: {value: /^[A-Za-z0-9._-]+$/i, message: "Username can only contain letters, numbers, underscores, dashes and periods"},
+                  onChange: (e)=> checkUsernameAvailability({"username": e.target.value})
                 })}
                   helperText={errors.username && errors.username.message}
                   error={errors.username && true}
                 />
+                {loading ? <CircularProgress/> : "no cargando"}
+                {/* <p className="error-text-signup"> {usernameAvailable ? "Username available" : "Username already taken"} </p> */}
               </FormControl>
             </Grid2>
             <Grid2 lg={12}>
@@ -85,7 +129,8 @@ function Signup() {
                   variant="outlined"
                   {...register("email", {
                     required: "This field is required",
-                    pattern: { value: /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i, message: "Invalid email address" }
+                    pattern: { value: /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i, message: "Invalid email address" },
+                    onChange: (e)=> checkEmailAvailability ({"email": e.target.value})
                   })}
                   helperText={errors.email && errors.email.message}
                   error={errors.email && true}
