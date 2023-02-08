@@ -14,16 +14,19 @@ import FormControl from "@mui/material/FormControl";
 import { useForm } from "react-hook-form";
 import Axios from "axios";
 import CircularProgress from '@mui/material/CircularProgress';
+import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
+import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 import Footer from "./Footer";
 
 function Signup() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
-  let [usernameAvailable, setUsernameavailable] = React.useState(true);
-  let [emailAvailable, setemailavailable] = React.useState(true);
+  let [usernameAvailable, setUsernameavailable] = React.useState(null);
+  let [emailAvailable, setemailavailable] = React.useState(null);
+  let [msg, setMsg] = React.useState("");
   let [loading, setLoading] = React.useState(false);
 
-  const { register, handleSubmit, formState: {errors}, watch } = useForm();
+  const { register, handleSubmit, formState: {errors}, watch, setError, clearErrors } = useForm();
 
   const passwordMessage =
   <div>
@@ -33,6 +36,14 @@ function Signup() {
     <p className="reset-p">* At least one uppercase</p>
     <p className="reset-p">* At least one lowercase</p>
     <p className="reset-p">* At least one special character</p> </div>;
+
+const usernameMessage =
+<div>
+  <p className="reset-p"> Username must have: </p>
+  <p className="reset-p">* Minimun 4 characters</p>
+  <p className="reset-p">* Maximun 20 characters</p>
+  <p className="reset-p">* Only periods, dashes and underscores allowed</p>
+  <p className="reset-p">* A special character can be follow by another one. E.g: .- or __ </p> </div>;
 
   const onSubmit = (data) => console.log(data);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -45,36 +56,76 @@ function Signup() {
 
 
   const checkUsernameAvailability = (e) => {
+    console.log(e.username);
+      watch("username")
+    if (e.username.length <= 2) {
+      
+      setUsernameavailable(null);
 
-    setLoading(true);
+    } 
+    else {
+
     Axios.post("http://localhost:3001/checkavailability", e)
     .then(res => {
-      // console.log(res.data);
+      console.log(res)
       setUsernameavailable(true);
-      setLoading(false);
     })
     .catch(err=> {
-      console.log(err.response.data.errors.username);
-      setUsernameavailable(false);
-      setLoading(false);
+      console.log(err)
+      if (err.response.status === 404) {
+        //Username available
+        // setUsernameavailable(true);
+        clearErrors("username");
+        setTimeout(() => {
+        }, 500);
+
+
+      } else if (err.response.status === 500) {
+        //Username not available
+        // setUsernameavailable(false);
+        setError('username', {
+          type: "server",
+          message: "Username is not available",
+        });
+      } else {
+        console.log("Error in server");
+      }
+
     })
 
   }
 
-  const checkEmailAvailability = (e) => {
-    setLoading(true);
-    Axios.post("http://localhost:3001/checkavailability", e)
-    .then(res => {
-      // console.log(res.data);
-      setemailavailable(true);
-      setLoading(false);
-    })
-    .catch(err=> {
-      console.log(err.response.data.errors.email);
-      setemailavailable(false);
-      setLoading(false);
-    })
+  }
 
+  const registerUser = (data) => {
+    setLoading(true);
+    console.log(data)
+    Axios.post("http://localhost:3001/registeruser", data)
+    .then(res => {
+      console.log(res.data)
+      setLoading(false);
+    }).catch(err=> {
+
+      if (err.code === "ERR_NETWORK") {
+        console.log("Error in server");
+        setMsg("Error in server");
+        setLoading(false);
+      }
+
+      if (err.response.data.errors.email) {
+        setError('email', {
+        type: "server",
+        message: err.response.data.errors.email,
+      });
+      }
+      if (err.response.data.errors.username) {
+        setError('username', {
+        type: "server",
+        message: err.response.data.errors.username,
+      });
+      }
+      setLoading(false);
+    })
   }
 
 
@@ -83,15 +134,25 @@ function Signup() {
       container
       sx={{
         background: "#50469E",
-        height: "100vh",
+        minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "column",
       }}
     >
-      <Box sx={{flex: "1 1 100%", display: "flex", alignItems: "center" }}>
-        <Box sx={{boxShadow: "#000 1px 1px 10px", background: "#fff", padding: "10px"}}>
+
+      {/* loading */}
+      { loading ?
+      <Box className="loader"> <CircularProgress size={60} /> </Box>
+      
+      : null
+
+      }
+
+
+      <Box sx={{flex: "1 1 100%", display: "flex", alignItems: "center" }} mb={2} mt={2}>
+        <Box sx={{boxShadow: "#000 1px 1px 10px", background: "#fff", padding: "1rem"}}>
           <Box
             sx={{
               display: "flex",
@@ -101,27 +162,30 @@ function Signup() {
             }}
           >
             <h1>Sign Up</h1>
-            <form onSubmit={handleSubmit(onSubmit)}>
-            <Grid2 lg={12}>
+            <form onSubmit={handleSubmit(registerUser)}>
+            <Grid2 lg={12} sm={2} >
               <FormControl sx={{ mt: 2, width: "17rem" }} variant="outlined">
                 <TextField
                   id="outlined-basic"
                   label="Username"
                   variant="outlined"
                   {...register("username", {required: "This field is required",
-                  minLength: {value: 3, message: "Username field must be at least 3 characters and no more than 20 characters"},
-                  maxLength: {value:20, message: "Username field must be at least 3 characters and no more than 20 characters"},
-                  pattern: {value: /^[A-Za-z0-9._-]+$/i, message: "Username can only contain letters, numbers, underscores, dashes and periods"},
+                  minLength: {value: 3, message: "Username field must be at least 4 characters and no more than 20 characters"},
+                  maxLength: {value:20, message: "Username field must be at least 4 characters and no more than 20 characters"},
+                  pattern: {value: /^(?=.{4,20}$)(?![])(?!.*[_.-]{2})[a-zA-Z0-9._-]+(?<![])$/gm, message: usernameMessage},
                   onChange: (e)=> checkUsernameAvailability({"username": e.target.value})
                 })}
                   helperText={errors.username && errors.username.message}
                   error={errors.username && true}
-                />
-                {loading ? <CircularProgress/> : "no cargando"}
-                {/* <p className="error-text-signup"> {usernameAvailable ? "Username available" : "Username already taken"} </p> */}
+                />  
+
+                {/* {usernameAvailable === null ? null : errors.username ? null : loading ? <Box mt={0.5}> <CircularProgress size={20} /></Box>  : usernameAvailable ? 
+                <Box sx={{display: "flex", alignItems: "center"}}> <CheckOutlinedIcon style={{color: "#66bb6a", fontSize: "1rem"}} /> Available </Box> : <Box sx={{display: "flex", alignItems: "center", color: "#D32F2F"}}> 
+                <ErrorOutlineOutlinedIcon  style={{color: "#D32F2F", fontSize: "1rem"}} />  Username already taken </Box>} */}
+                
               </FormControl>
             </Grid2>
-            <Grid2 lg={12}>
+            <Grid2 lg={12} sm={2}>
               <FormControl sx={{ mt: 2, width: "17rem" }} variant="outlined">
                 <TextField
                   id="outlined-basic"
@@ -130,14 +194,14 @@ function Signup() {
                   {...register("email", {
                     required: "This field is required",
                     pattern: { value: /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i, message: "Invalid email address" },
-                    onChange: (e)=> checkEmailAvailability ({"email": e.target.value})
+                    // onChange: (e)=> checkEmailAvailability ({"email": e.target.value})
                   })}
                   helperText={errors.email && errors.email.message}
                   error={errors.email && true}
                 />
               </FormControl>
             </Grid2>
-            <Grid2 lg={12}>
+            <Grid2 lg={12} sm={2}>
               <FormControl sx={{ mt: 2, width: "17rem" }} variant="outlined">
                 <InputLabel color={errors.password && "error"} htmlFor="outlined-adornment-password" sx={{color: errors.password && "#D32F2F"}}>
                   Password
@@ -171,7 +235,7 @@ function Signup() {
                 {<p className="error-text-signup"> {errors.password && errors.password.message} </p>}
               </FormControl>
             </Grid2>
-            <Grid2 lg={12}>
+            <Grid2 lg={12} sm={2}>
               <FormControl sx={{ mt: 2, width: "17rem" }} variant="outlined">
                 <InputLabel color={errors.confirmPassword && "error"} htmlFor="outlined-adornment-password" sx={{color: errors.confirmPassword && "#D32F2F"}}>
                   Confirm Password
@@ -201,6 +265,9 @@ function Signup() {
                 />
                 {<p className="error-text-signup"> {errors.confirmPassword && errors.confirmPassword.message} </p>}
               </FormControl>
+
+              <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", color: "#D32F2F"}}> {!msg ? "" : msg} </Box>
+              
               <Grid2 sx={{ display: "flex", justifyContent: "center" }}>
                 <Button type="submit" variant="contained" sx={{ marginTop: "10%" }}>
                   Create an account
