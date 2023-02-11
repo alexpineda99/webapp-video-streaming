@@ -1,15 +1,17 @@
+import React from "react";
 import { useState } from "react";
 import "../assets/Css/main.scss";
 import Box from "@mui/material/Box";
-import { red } from "@mui/material/colors";
+import SuccessfullyRegistered from "./modals/successfullyRegistered";
 import Footer from "./Footer";
-import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import {useSelector, useDispatch} from "react-redux";
 import {sumar} from "../State/reducers/actions-creators";
 
 function Home() {
-  const [count, setCount] = useState(0);
+  const [open, setOpen] = React.useState(true);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const state = useSelector((state)=> console.log(state));
   const dispatch = useDispatch();
