@@ -12,7 +12,9 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Button from "@mui/material/Button";
 import FormControl from "@mui/material/FormControl";
 import { useForm } from "react-hook-form";
+import Axios from "axios";
 import Footer from "./Footer";
+import axios from "axios";
 
 function SignIn() {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -30,12 +32,18 @@ function SignIn() {
     event.preventDefault();
   };
 
+  const login = (data) => {
+    Axios.post("http://localhost:3001/loguser", data)
+    .then(res => console.log(res.data))
+    .catch(err => console.log(err))
+  }
+
   return (
     <Box
       container
       sx={{
         background: "#50469E",
-        height: "100vh",
+        minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -55,14 +63,14 @@ function SignIn() {
           }}
         >
             <h1>Sign In</h1>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(login)}>
             <Grid2 lg={12}>
               <FormControl sx={{ mt: 2, width: "17rem" }} variant="outlined">
                 <TextField
                   id="outlined-basic"
-                  label="Username"
+                  label="Username or email"
                   variant="outlined"
-                  {...register("username")}
+                  {...register("username_email")}
                   helperText={errors.username && errors.username.message}
                   error={errors.username && true}
                 />
