@@ -1,32 +1,35 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./Components/Home";
 import Signup from "./Components/SignUp";
 import SignIn from "./Components/SignIn";
-
-// import "./App.css";
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-  },{
-    path: "/signup",
-    element: <Signup />,
-  },,{
-    path: "/signin",
-    element: <SignIn/>,
-  }
-]);
+import {
+  PrivateRoute,
+  NotAllowedForUser,
+} from "./Components/privateRoutes/Privateroutes";
+import Profile from "./Components/userComponents/Profile";
+import NotFound from "./Components/Main Pages/NotFound";
+import { useSelector } from "react-redux";
 
 function App() {
+  const userToken = useSelector((state) => state.userState.user);
+
   return (
-    <>
-      <div>
-          <RouterProvider router={router} />
-      </div>
-    </>
+    <BrowserRouter>
+      <Routes>
+        {/* Common Routes */}
+        <Route path="/" element={<Home />} />
+        <Route path="*" element={<NotFound />} />
+        {/* Routes not allowed for user */}
+        <Route element={<NotAllowedForUser user={userToken} />}>
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/signin" element={<SignIn />} />
+        </Route>
+        {/* Private routes */}
+        <Route element={<PrivateRoute user={userToken} />}>
+          <Route path="/profile" element={<Profile />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

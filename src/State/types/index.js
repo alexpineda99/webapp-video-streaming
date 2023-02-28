@@ -1,0 +1,5 @@
+//USER LOGIN, LOGOUT, ETC
+
+export const LOGUSER = "LOGUSER";
+export const LOGUSER_KEEPSESSION = "LOGUSER_KEEPSESSION";
+export const LOGOUT = "LOGOUT";

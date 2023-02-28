@@ -14,15 +14,15 @@ import FormControl from "@mui/material/FormControl";
 import { useForm } from "react-hook-form";
 import Axios from "axios";
 import CircularProgress from '@mui/material/CircularProgress';
-import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
-import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
+import Stack from '@mui/material/Stack';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import {useNavigate} from "react-router-dom";
 import Footer from "./Footer";
 
 function Signup() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
   let [usernameAvailable, setUsernameavailable] = React.useState(null);
-  let [emailAvailable, setemailavailable] = React.useState(null);
   let [msg, setMsg] = React.useState("");
   let [loading, setLoading] = React.useState(false);
 
@@ -45,7 +45,11 @@ const usernameMessage =
   <p className="reset-p">* Only periods, dashes and underscores allowed</p>
   <p className="reset-p">* A special character can be follow by another one. E.g: .- or __ </p> </div>;
 
-  const onSubmit = (data) => console.log(data);
+const navigate = useNavigate();
+const goBack = () => {
+  navigate(-1);
+}
+
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleClickShowConfirmPassword = () =>
     setShowConfirmPassword((show) => !show);
@@ -74,7 +78,6 @@ const usernameMessage =
       console.log(err)
       if (err.response.status === 404) {
         //Username available
-        // setUsernameavailable(true);
         clearErrors("username");
         setTimeout(() => {
         }, 500);
@@ -82,7 +85,6 @@ const usernameMessage =
 
       } else if (err.response.status === 500) {
         //Username not available
-        // setUsernameavailable(false);
         setError('username', {
           type: "server",
           message: "Username is not available",
@@ -102,8 +104,10 @@ const usernameMessage =
     console.log(data)
     Axios.post("http://localhost:3001/registeruser", data)
     .then(res => {
-      console.log(res.data)
-      setLoading(false);
+      setTimeout(() => {
+        console.log(res.data);
+        setLoading(false);
+      }, 500);
     }).catch(err=> {
 
       if (err.code === "ERR_NETWORK") {
@@ -150,6 +154,10 @@ const usernameMessage =
 
       }
 
+      <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={2} width="100%">
+        <IconButton onClick={goBack}> <ArrowBackIcon sx={{fontSize: "3rem"}}/> </IconButton>
+      </Stack>
+
 
       <Box sx={{flex: "1 1 100%", display: "flex", alignItems: "center" }} mb={2} mt={2}>
         <Box sx={{boxShadow: "#000 1px 1px 10px", background: "#fff", padding: "1rem"}}>
@@ -179,10 +187,6 @@ const usernameMessage =
                   error={errors.username && true}
                 />  
 
-                {/* {usernameAvailable === null ? null : errors.username ? null : loading ? <Box mt={0.5}> <CircularProgress size={20} /></Box>  : usernameAvailable ? 
-                <Box sx={{display: "flex", alignItems: "center"}}> <CheckOutlinedIcon style={{color: "#66bb6a", fontSize: "1rem"}} /> Available </Box> : <Box sx={{display: "flex", alignItems: "center", color: "#D32F2F"}}> 
-                <ErrorOutlineOutlinedIcon  style={{color: "#D32F2F", fontSize: "1rem"}} />  Username already taken </Box>} */}
-                
               </FormControl>
             </Grid2>
             <Grid2 lg={12} sm={2}>
@@ -194,7 +198,6 @@ const usernameMessage =
                   {...register("email", {
                     required: "This field is required",
                     pattern: { value: /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i, message: "Invalid email address" },
-                    // onChange: (e)=> checkEmailAvailability ({"email": e.target.value})
                   })}
                   helperText={errors.email && errors.email.message}
                   error={errors.email && true}

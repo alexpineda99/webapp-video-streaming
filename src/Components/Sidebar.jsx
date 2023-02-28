@@ -7,22 +7,21 @@ export default (props) => {
 
   let isMenuOpen = (state) => {
     // return state.isOpen;
-    console.log(state);
   };
 
   return (
     // Pass on our props
     <Menu {...props} onStateChange={isMenuOpen}>
       <Box sx={{marginTop: "10%", color: "#fff"}}>
-        <span className="text-nav"><Link> Home </Link></span>
-      </Box>
-
-      <Box sx={{marginTop: "10%", color: "#fff"}}>
-        <span className="text-nav"> <Link to={"/signup"}> Sign Up </Link> </span>
+        <span className="text-nav"><Link to={"/"}> Home </Link></span>
       </Box>
 
       <Box sx={{marginTop: "10%", color: "#fff"}}>
         <span className="text-nav"> <Link to={"/signin"}> Sign In </Link> </span>
+      </Box>
+
+      <Box sx={{marginTop: "10%", color: "#fff"}}>
+        <span className="text-nav"> <Link to={"/signup"}> Sign Up </Link> </span>
       </Box>
 
       <Box sx={{marginTop: "10%", color: "#fff"}}>

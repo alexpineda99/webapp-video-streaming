@@ -5,16 +5,12 @@ import Box from "@mui/material/Box";
 import SuccessfullyRegistered from "./modals/successfullyRegistered";
 import Footer from "./Footer";
 import Sidebar from "./Sidebar";
-import {useSelector, useDispatch} from "react-redux";
-import {sumar} from "../State/reducers/actions-creators";
+
 
 function Home() {
   const [open, setOpen] = React.useState(true);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const state = useSelector((state)=> console.log(state));
-  const dispatch = useDispatch();
 
   return (
     <div id="outer-container">
