@@ -67,6 +67,29 @@ body {
     transition: ease-in-out 0.1ms;
   }
 
+//Scrollbar
+
+  /* width */
+::-webkit-scrollbar {
+  width: 3px;
+  float: left
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
   .text-nav::after {
     content: "";
     position: absolute;
