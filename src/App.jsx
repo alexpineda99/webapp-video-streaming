@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./Components/Home";
 import Signup from "./Components/SignUp";
 import SignIn from "./Components/SignIn";
+import User from "./Components/userComponents/User";
 import {
   PrivateRoute,
   NotAllowedForUser,
@@ -18,6 +19,7 @@ function App() {
       <Routes>
         {/* Common Routes */}
         <Route path="/" element={<Home />} />
+        <Route path="/user/:username" element={<User />} />
         <Route path="*" element={<NotFound />} />
         {/* Routes not allowed for user */}
         <Route element={<NotAllowedForUser user={userToken} />}>

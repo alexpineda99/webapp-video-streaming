@@ -23,6 +23,7 @@ function Signup() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
   let [usernameAvailable, setUsernameavailable] = React.useState(null);
+  let [avatar, setAvatar] = React.useState()
   let [msg, setMsg] = React.useState("");
   let [loading, setLoading] = React.useState(false);
 
@@ -50,7 +51,9 @@ const goBack = () => {
   navigate(-1);
 }
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowPassword = () => 
+  setShowPassword((show) => !show);
+
   const handleClickShowConfirmPassword = () =>
     setShowConfirmPassword((show) => !show);
 
@@ -100,16 +103,23 @@ const goBack = () => {
   }
 
   const registerUser = (data) => {
-    setLoading(true);
+    // setLoading(true);
+    avatar = data.avatar;
+    const formdata = new FormData();
+    formdata.append("file", avatar[0]);
+    formdata.append("username", data.username)
+    formdata.append("email", data.email)
+    formdata.append("password", data.password)
     console.log(data)
-    Axios.post("http://localhost:3001/registeruser", data)
+    Axios.post("http://localhost:3001/registeruser", formdata)
     .then(res => {
+      console.log(res)
       setTimeout(() => {
         console.log(res.data);
         setLoading(false);
       }, 500);
     }).catch(err=> {
-
+      console.log(err)
       if (err.code === "ERR_NETWORK") {
         console.log("Error in server");
         setMsg("Error in server");
@@ -170,7 +180,7 @@ const goBack = () => {
             }}
           >
             <h1>Sign Up</h1>
-            <form onSubmit={handleSubmit(registerUser)}>
+            <form onSubmit={handleSubmit(registerUser)} enctype = "multipart/form-data">
             <Grid2 lg={12} sm={2} >
               <FormControl sx={{ mt: 2, width: "17rem" }} variant="outlined">
                 <TextField
@@ -268,7 +278,29 @@ const goBack = () => {
                 />
                 {<p className="error-text-signup"> {errors.confirmPassword && errors.confirmPassword.message} </p>}
               </FormControl>
+              
+                {/* file upload */}
 
+
+                <Grid2 lg={12} sm={2}>
+              <FormControl sx={{ mt: 2, width: "17rem" }} variant="outlined">
+              <Button
+              variant="contained"
+              component="label"
+              >
+              Upload avatar profile
+              <input
+              type="file"
+              hidden
+              {...register("avatar",{required: "This field is required", pattern: {value: /\.(jpe?g|png)$/i, message: "Only .jpg, .jpeg and .png files are allowed"}})}
+              />
+              </Button>
+              { <p className="error-text-signup"> {errors.avatar && errors.avatar.message} </p>}
+              {console.log(errors)}
+              </FormControl>
+            </Grid2>
+            {/* { <p className="error-text-signup"> {errors.avatar && errors.avatar.message} </p>} */}
+                {/* fin file upload  */}
               <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", color: "#D32F2F"}}> {!msg ? "" : msg} </Box>
               
               <Grid2 sx={{ display: "flex", justifyContent: "center" }}>
