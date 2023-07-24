@@ -14,7 +14,7 @@ export default function userStatus(state = initialState, action) {
       return {...state, user: action.payload, keepSessionAlive: true};
       break;
     case LOGOUT:
-      return state;
+      return initialState
       break;
     default:
       return state;

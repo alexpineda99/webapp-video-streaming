@@ -1,5 +1,4 @@
 import * as React from "react";
-import "../assets/Css/main.scss";
 import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 import Grid2 from "@mui/material/Unstable_Grid2";
@@ -187,7 +186,7 @@ const goBack = () => {
                   id="outlined-basic"
                   label="Username"
                   variant="outlined"
-                  {...register("username", {required: "This field is required",
+                  {...register("username", {required: "Username field is required",
                   minLength: {value: 3, message: "Username field must be at least 4 characters and no more than 20 characters"},
                   maxLength: {value:20, message: "Username field must be at least 4 characters and no more than 20 characters"},
                   pattern: {value: /^(?=.{4,20}$)(?![])(?!.*[_.-]{2})[a-zA-Z0-9._-]+(?<![])$/gm, message: usernameMessage},
@@ -206,7 +205,7 @@ const goBack = () => {
                   label="Email"
                   variant="outlined"
                   {...register("email", {
-                    required: "This field is required",
+                    required: "Email field is required",
                     pattern: { value: /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i, message: "Invalid email address" },
                   })}
                   helperText={errors.email && errors.email.message}
@@ -238,7 +237,7 @@ const goBack = () => {
                   }
                   // label="Password"
                   {...register("password", {
-                    required: "This field is required", minLength: { value: 8, message: passwordMessage }, maxLength: { value: 16, message: passwordMessage },
+                    required: "Password field is required", minLength: { value: 8, message: passwordMessage }, maxLength: { value: 16, message: passwordMessage },
                     pattern: { value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,16})/gm, message: passwordMessage }
                   })}
                   // helperText={errors.password && errors.password.message}
@@ -274,7 +273,7 @@ const goBack = () => {
                   }
                   label="Confirm Password"
                   error={errors.confirmPassword && true}
-                  {...register("confirmPassword", { required: "This field is required", validate: (value) => {if(watch("password") != value){return "Passwords do not match"}}  })}
+                  {...register("confirmPassword", { required: "Confirm Password field is required", validate: (value) => {if(watch("password") != value){return "Passwords do not match"}}  })}
                 />
                 {<p className="error-text-signup"> {errors.confirmPassword && errors.confirmPassword.message} </p>}
               </FormControl>
@@ -292,8 +291,10 @@ const goBack = () => {
               <input
               type="file"
               hidden
-              {...register("avatar",{required: "This field is required", pattern: {value: /\.(jpe?g|png)$/i, message: "Only .jpg, .jpeg and .png files are allowed"}})}
+              // accept="image/png, image/jpeg, image/jpg"
+              {...register("avatar",{required: "Avatar field is required", pattern: {value: /\.(jpe?g|png)$/i, message: "Only .jpg, .jpeg and .png files are allowed"}})}
               />
+
               </Button>
               { <p className="error-text-signup"> {errors.avatar && errors.avatar.message} </p>}
               {console.log(errors)}

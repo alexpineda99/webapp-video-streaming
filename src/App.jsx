@@ -10,8 +10,12 @@ import {
 import Profile from "./Components/userComponents/Profile";
 import NotFound from "./Components/Main Pages/NotFound";
 import { useSelector } from "react-redux";
+import { axiosInstanceRefreshToken } from "./config/https";
 
 function App() {
+
+  axiosInstanceRefreshToken();
+
   const userToken = useSelector((state) => state.userState.user);
 
   return (

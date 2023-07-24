@@ -20,6 +20,12 @@ body {
   font-family: "Bebas";
 }
 
+main {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 #outer-container {
   background: #232651;
 }
@@ -28,7 +34,7 @@ body {
   /* The image used */
   display: flex;
   flex-direction: column;
-  background-image: url("../img/ella-don-Hzh9sbcV0Dg-unsplash.jpg");
+  /* background-image: url("../img/ella-don-Hzh9sbcV0Dg-unsplash.jpg"); */
   /* Set a specific height */
   height: 100vh;
   /* Create the parallax scrolling effect */
@@ -216,3 +222,10 @@ Note: Beware of modifying this element as it can break the animations - you shou
 .bm-overlay {
   background: rgba(0, 0, 0, 0.3);
 }/*# sourceMappingURL=main.css.map */
+
+
+.user-avatar {
+  width: 20%;
+  height: 20%;
+  border-radius: 50%;
+}

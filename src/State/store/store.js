@@ -19,6 +19,6 @@ const store = configureStore({
     }})
 });
 
-store.subscribe(()=>console.log(store));
+store.subscribe(()=>store);
 
 export default store;

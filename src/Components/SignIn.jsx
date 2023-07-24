@@ -1,5 +1,4 @@
 import * as React from "react";
-import "../assets/Css/main.scss";
 import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 import Grid2 from "@mui/material/Unstable_Grid2";
@@ -12,25 +11,21 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Button from "@mui/material/Button";
 import FormControl from "@mui/material/FormControl";
 import Axios from "axios";
-import {useNavigate} from "react-router-dom";
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Stack from '@mui/material/Stack';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useNavigate } from "react-router-dom";
+import Stack from "@mui/material/Stack";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Footer from "./Footer";
 import { useForm } from "react-hook-form";
-import {useSelector, useDispatch} from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { loguser, loguser_keepsession } from "../State/actions-creators";
 
 function SignIn() {
   const [showPassword, setShowPassword] = React.useState(false);
   let [msg, setMsg] = React.useState("");
-
-  const state = useSelector((state)=> state.userState.user);
-  console.log(state)
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const onSubmit = data => console.log(data);
+  const state = useSelector((state) => state.userState.user);
 
   const {
     register,
@@ -39,10 +34,9 @@ function SignIn() {
     watch,
   } = useForm();
 
-  const navigate = useNavigate();
   const goBack = () => {
-  navigate(-1);
-  }
+    navigate(-1);
+  };
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -51,15 +45,15 @@ function SignIn() {
   };
 
   const login = (data) => {
-    Axios.post("http://localhost:3001/loguser", data)
+    Axios.post("http://localhost:3001/loguser", data, {withCredentials: true})
     .then(res => {
-
+      console.log(res.data)
       if (data) {
-        dispatch(loguser(res.data.token))
+        dispatch(loguser(res.data.accessToken))
       }
     })
     .catch(err => {
-      console.log(err)
+      console.log(err.response.data)
       setMsg(err.response.data)
     })
   }
@@ -76,8 +70,17 @@ function SignIn() {
         flexDirection: "column",
       }}
     >
-      <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={2} width="100%">
-        <IconButton onClick={goBack}> <ArrowBackIcon sx={{fontSize: "3rem"}}/> </IconButton>
+      <Stack
+        direction="row"
+        justifyContent="flex-start"
+        alignItems="flex-start"
+        spacing={2}
+        width="100%"
+      >
+        <IconButton onClick={goBack}>
+          {" "}
+          <ArrowBackIcon sx={{ fontSize: "3rem" }} />{" "}
+        </IconButton>
       </Stack>
 
       <Box sx={{ flex: "1 1 100%", display: "flex", alignItems: "center" }}>
@@ -89,11 +92,10 @@ function SignIn() {
             boxShadow: "#000 1px 1px 10px",
             background: "#fff",
             padding: "1.3rem",
-            borderRadius: "10px"
+            borderRadius: "10px",
           }}
         >
-
-            <h1>Sign In</h1>
+          <h1>Sign In</h1>
           <form onSubmit={handleSubmit(login)}>
             <Grid2 lg={12}>
               <FormControl sx={{ mt: 2, width: "17rem" }} variant="outlined">
@@ -101,8 +103,12 @@ function SignIn() {
                   id="outlined-basic"
                   label="Username or email"
                   variant="outlined"
-                  {...register("username_email", {required: "This field is empty."})}
-                  helperText={errors.username_email && errors.username_email.message}
+                  {...register("username_email", {
+                    required: "This field is empty.",
+                  })}
+                  helperText={
+                    errors.username_email && errors.username_email.message
+                  }
                   error={errors.username_email && true}
                 />
               </FormControl>
@@ -133,7 +139,9 @@ function SignIn() {
                     </InputAdornment>
                   }
                   // label="Password"
-                  {...register("password", {required: "This field is required."})}
+                  {...register("password", {
+                    required: "This field is required.",
+                  })}
                   // helperText={errors.password && errors.password.message}
 
                   error={errors.password && true}
@@ -147,8 +155,19 @@ function SignIn() {
               </FormControl>
             </Grid2>
             <Grid2 lg={12}>
-            <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", color: "#D32F2F"}} mt={2} > {!msg ? "" : msg} </Box>
-            {/* <FormControlLabel label="Remember me" sx={{marginLeft: "0px"}} control={<Checkbox defaultChecked={false} />} labelPlacement="start" {...register("remember")} /> */}
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  color: "#D32F2F",
+                }}
+                mt={2}
+              >
+                {" "}
+                {!msg ? "" : msg}{" "}
+              </Box>
+              {/* <FormControlLabel label="Remember me" sx={{marginLeft: "0px"}} control={<Checkbox defaultChecked={false} />} labelPlacement="start" {...register("remember")} /> */}
               <Grid2 sx={{ display: "flex", justifyContent: "center" }}>
                 <Button
                   type="submit"
@@ -159,8 +178,15 @@ function SignIn() {
                 </Button>
               </Grid2>
               <Box mt={2}>
-            <Button size="small" onClick={()=> dispatch(loguser({user: "aLEX", trastorno: true}))} >Forgot password?</Button>
-          </Box>
+                <Button
+                  size="small"
+                  onClick={() =>
+                    dispatch(loguser({ user: "aLEX", trastorno: true }))
+                  }
+                >
+                  Forgot password?
+                </Button>
+              </Box>
             </Grid2>
           </form>
         </Box>
