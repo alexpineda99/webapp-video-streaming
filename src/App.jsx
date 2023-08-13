@@ -3,6 +3,7 @@ import Home from "./Components/Home";
 import Signup from "./Components/SignUp";
 import SignIn from "./Components/SignIn";
 import User from "./Components/userComponents/User";
+import LogoutUser from "./Components/userComponents/LogoutUser";
 import {
   PrivateRoute,
   NotAllowedForUser,
@@ -33,6 +34,7 @@ function App() {
         {/* Private routes */}
         <Route element={<PrivateRoute user={userToken} />}>
           <Route path="/profile" element={<Profile />} />
+          <Route path="/logout" element={<LogoutUser />} />
         </Route>
       </Routes>
     </BrowserRouter>

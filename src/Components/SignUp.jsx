@@ -81,9 +81,6 @@ const goBack = () => {
       if (err.response.status === 404) {
         //Username available
         clearErrors("username");
-        setTimeout(() => {
-        }, 500);
-
 
       } else if (err.response.status === 500) {
         //Username not available
@@ -104,12 +101,12 @@ const goBack = () => {
   const registerUser = (data) => {
     // setLoading(true);
     avatar = data.avatar;
+    console.log(avatar)
     const formdata = new FormData();
     formdata.append("file", avatar[0]);
     formdata.append("username", data.username)
     formdata.append("email", data.email)
     formdata.append("password", data.password)
-    console.log(data)
     Axios.post("http://localhost:3001/registeruser", formdata)
     .then(res => {
       console.log(res)
@@ -309,9 +306,6 @@ const goBack = () => {
                   Create an account
                 </Button>
               </Grid2>
-              {/* <Grid2 sx={{ mt: 2, display: "flex", justifyContent: "center" }}>
-                <span> Forgot password?</span>
-              </Grid2> */}
             </Grid2>
             </form>
           </Box>

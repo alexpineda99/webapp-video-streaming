@@ -44,6 +44,11 @@ export default (props) => {
         <Box>
           <Box sx={{ marginTop: "10%", color: "#fff" }}>
             <span className="text-nav">
+              <Link to={"/"}> Home </Link>
+            </span>
+          </Box>
+          <Box sx={{ marginTop: "10%", color: "#fff" }}>
+            <span className="text-nav">
               {" "}
               <Link to={"/profile"}> Profile </Link>{" "}
             </span>

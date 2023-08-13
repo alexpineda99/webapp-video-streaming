@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { useSelector} from "react-redux";
+import Sidebar from "../Sidebar";
+import { useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 
 interface User {
-  username: String;
-  avatar: String;
-  followers: Number;
-  following: Number;
+  username?: String;
+  avatar?: String;
+  followers?: Number;
+  following?: Number;
 }
 
 function User() {
@@ -17,8 +18,32 @@ function User() {
   let [_username, setUsername] = useState("");
   let [following, setFollowing] = useState(false);
   let [user, setUser] = useState<Array<User>>([]);
-  let navigate = useNavigate();
   const header = useSelector((state: any) => state.userState.user);
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/user/${username}`, {
+        headers: { auth: header },
+      })
+      .then((res) => {
+        if (res.data.sameUser) {
+          return navigate("/profile");
+        }
+        setUser(res.data.infoUser);
+        let checkFollowing = res.data.infoUser.followers.filter(
+          (user) => user.username === res.data.currentUser
+        );
+        if (checkFollowing.length > 0) {
+          setFollowing(true);
+        }
+        setUsername(res.data.username);
+      })
+      .catch((err) => {
+        console.log("Error getting user: " + err);
+        // navigate("/usernotfound");
+      });
+  }, [following]);
 
   const followUser = () => {
     axios
@@ -47,39 +72,15 @@ function User() {
       });
   };
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:3001/user/${username}`, {
-        
-        headers: { auth: header },
-      })
-      .then((res) => {
-        if (res.data.sameUser) {
-          return navigate("/profile");
-        }
-        setUser(res.data.infoUser);
-        let checkFollowing = res.data.infoUser.followers.filter(
-          (user) => user.username === res.data.currentUser
-        );
-        if (checkFollowing.length > 0) {
-          setFollowing(true);
-        }
-        setUsername(res.data.username);
-      })
-      .catch((err) => {
-        console.log("Error getting user: " + err);
-        // navigate("/usernotfound");
-      });
-  }, [following]);
-
   return (
     <>
+      <Sidebar />
       <Box
         display={"flex"}
         justifyContent={"center"}
         flexDirection={"column"}
         alignItems={"center"}
-        sx={{fontSize: "1.1rem"}}
+        sx={{ fontSize: "1.1rem", background: "#232651" }}
       >
         <Box
           display={"flex"}
@@ -88,7 +89,7 @@ function User() {
           alignItems={"center"}
           width={"90%"}
           minHeight={"100vh"}
-          sx={{background: "#232651"}}
+          sx={{ background: "#141228" }}
         >
           <img src={user.avatar} className="user-avatar" />
           <p>@{user.username} </p>
